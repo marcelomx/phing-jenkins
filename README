@@ -1,0 +1,3 @@
+Those are mainly the config files from http://jenkins-php.org/ with some changes to use with PHING, instead of ANT.
+
+The job template to use can be found under https://github.com/sebastianbergmann/php-jenkins-template.
