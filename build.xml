@@ -1,0 +1,70 @@
+<project name="silex" default="build" basedir=".">
+ <property name="basedir" value="${project.basedir}" />
+ <property name="source" value="${basedir}/src"/>
+
+ <target name="clean" description="Clean up and create artifact directories">
+  <delete dir="${basedir}/build/api"/>
+  <delete dir="${basedir}/build/code-browser"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
+
+  <mkdir dir="${basedir}/build/api"/>
+  <mkdir dir="${basedir}/build/code-browser"/>
+  <mkdir dir="${basedir}/build/coverage"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/pdepend"/>
+ </target>
+
+ <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+   <exec logoutput="true"
+         command="phpunit --configuration=phpunit.xml.dist" />
+ </target>
+
+ <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
+   <phingcall target="pdepend"/>
+   <phingcall target="phpmd"/>
+   <phingcall target="phpcpd"/>
+   <phingcall target="phpcs"/>
+   <phingcall target="phpdoc"/>
+   <phingcall target="phploc"/>
+ </target>
+
+ <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+  <exec logoutput="true"
+        command="pdepend --jdepend-xml=${basedir}/build/logs/jdepend.xml --jdepend-chart=${basedir}/build/pdepend/dependencies.svg --overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg ${source}" />
+ </target>
+
+ <target name="phpmd" description="Generate pmd.xml using PHPMD">
+  <exec logoutput="true" spawn="true"
+        command="phpmd ${source} xml codesize,design,naming,unusedcode --reportfile ${basedir}/build/logs/pmd.xml" />
+ </target>
+
+ <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+  <exec logoutput="true"
+        command="phpcpd --log-pmd ${basedir}/build/logs/pmd-cpd.xml ${source}" />
+ </target>
+
+ <target name="phploc" description="Generate phploc.csv">
+  <exec logoutput="true"
+        command="phploc --log-csv ${basedir}/build/logs/phploc.csv ${source}" />
+ </target>
+
+ <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
+  <exec logoutput="true"
+        command="phpcs --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml --standard=PEAR ${source}" />
+ </target>
+
+ <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
+  <exec logoutput="true"
+        command="phpdoc -d ${source} -t ${basedir}/build/api" />
+ </target>
+
+ <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+  <exec logoutput="true"
+        command="phpcb --log ${basedir}/build/logs --source ${source} --output ${basedir}/build/code-browser" />
+ </target>
+
+ <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
+
+</project>
