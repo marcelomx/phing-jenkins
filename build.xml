@@ -23,11 +23,11 @@
 
 	<target name="run_parallel_tasks">
 		<parallel threadCount="${threads}">
-			<phingcall target="tasks_to_try_parallel" />	
+			<phingcall target="tasks_to_try" />	
 		</parallel>		
 	</target>
 	<target name="run_serial_tasks">
-		<phingcall target="tasks_to_try_parallel" />
+		<phingcall target="tasks_to_try" />
 	</target>
 	<target name="tasks_to_try">
 		<phingcall target="pdepend" />
