@@ -1,4 +1,4 @@
-<project name="silex" default="build" basedir=".">
+<project name="jenkins-php" default="build" basedir=".">
  <property name="basedir" value="${project.basedir}" />
  <property name="source" value="${basedir}/src"/>
 
@@ -21,7 +21,7 @@
          command="phpunit --configuration=phpunit.xml.dist" />
  </target>
 
- <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.">
+ <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks">
    <phingcall target="pdepend"/>
    <phingcall target="phpmd"/>
    <phingcall target="phpcpd"/>
