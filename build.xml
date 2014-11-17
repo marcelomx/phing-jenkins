@@ -18,7 +18,7 @@
 	</target>
 
 	<target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
-		<exec logoutput="true" command="phpunit --configuration=phpunit.xml.dist" />
+		<exec logoutput="true" command="phpunit --configuration=phpunit.xml.dist" checkreturn="true" />
 	</target>
 
 	<target name="run_parallel_tasks">
